@@ -53,3 +53,5 @@ module.exports = {
 [Dedup]: d:\Projects\webpack-dedupe\node_modules\a\node_modules\debug
       => d:\Projects\webpack-dedupe\node_modules\debug
 ```
+
+4. Adding path options, that will help with monorepo. It will keep node_modules under root path.
