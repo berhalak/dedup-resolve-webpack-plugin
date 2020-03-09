@@ -1,12 +1,9 @@
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Robo Burned
-*/
 
 const defaults = {
 	verbose: false,
 	modules: {},
-	exclude: null
+	exclude: null,
+	path: null,
 };
 
 function DedupPlugin(options) {
@@ -22,11 +19,20 @@ function getCacheId(request) {
 	});
 }
 
-DedupPlugin.prototype.apply = function(resolver) {
+
+const is = new RegExp(/.*node_modules/);
+function rewrite(from, to) {
+	if (from.startsWith(to)) {
+		return from;
+	}
+	return from.replace(is, to);
+}
+
+DedupPlugin.prototype.apply = function (resolver) {
 	var options = this.options;
 	var cache = this.cache;
 
-	resolver.plugin(this.source, function(request, callback) {
+	resolver.plugin(this.source, function (request, callback) {
 		if (request.relativePath !== ".") {
 			callback();
 			return;
@@ -35,9 +41,12 @@ DedupPlugin.prototype.apply = function(resolver) {
 			callback();
 			return;
 		}
+
+
+
 		var cacheId = getCacheId(request);
 		var cacheEntry = cache[cacheId];
-		if(cacheEntry) {
+		if (cacheEntry) {
 			if (request.path !== cacheEntry.path) {
 				if (options.verbose) {
 					console.log("[Dedup]: " + request.path);
@@ -46,10 +55,14 @@ DedupPlugin.prototype.apply = function(resolver) {
 				request.path = cacheEntry.path;
 			}
 		} else {
-			cache[cacheId] = { path: request.path };
+			if (options.path) {
+				cache[cacheId] = { path: rewrite(request.path, options.path) };
+			} else {
+				cache[cacheId] = { path: request.path };
+			}
 		}
 		callback();
 	});
 };
 
-module.exports = DedupPlugin;
+module.export = DedupPlugin
