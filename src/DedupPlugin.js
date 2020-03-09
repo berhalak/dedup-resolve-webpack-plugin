@@ -65,4 +65,4 @@ DedupPlugin.prototype.apply = function (resolver) {
 	});
 };
 
-module.export = DedupPlugin
+module.exports = DedupPlugin;
