@@ -18,10 +18,10 @@ This plugin will check the dependecies, their versions and will use only one (fi
 1. Install the plugin as a development dependency:
 
     **Yarn:**
-    `yarn add @roboburned/dedup-resolve-webpack-plugin -D`
+    `yarn add @berhalak/dedup-resolve-webpack-plugin -D`
 
     **NPM:**
-    `npm install @roboburned/dedup-resolve-webpack-plugin -D`
+    `npm install @berhalak/dedup-resolve-webpack-plugin -D`
 
 2. Require a plugin in webpack configuration file and register it as **resolve** plugin.
 ```js
@@ -41,7 +41,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js'],
-    plugins: [new DedupPlugin({verbose: true})]
+    plugins: [new DedupPlugin({ path: path.resolve(__dirname, "node_modules") })],
   },
   plugins: [/*DO NOT ADD the plugin here. Add it to resolve/plugins section.*/]
 }
