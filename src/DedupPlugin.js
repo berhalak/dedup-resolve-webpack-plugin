@@ -42,9 +42,14 @@ DedupPlugin.prototype.apply = function (resolver) {
 			return;
 		}
 
-
+		// if no default exclude, omit tslib as it requires more logic
+		if (!options.exclude && request.descriptionFileData.name == 'tslib') {
+			callback();
+			return;
+		}
 
 		var cacheId = getCacheId(request);
+
 		var cacheEntry = cache[cacheId];
 		if (cacheEntry) {
 			if (request.path !== cacheEntry.path) {
